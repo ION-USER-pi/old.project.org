@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Project directory listing with modern interface">
+  <title>Project Directory - Modern Interface</title>
+  <style>
+    :root {
+      --primary-color: #4a6da7;
+      --primary-dark: #345389;
+      --secondary-color: #f5f7fa;
+      --text-color: #333;
+      --border-color: #e1e4e8;
+      --hover-color: #f0f4f8;
+      --accent-color: #5e81ac;
+      --warning-color: #e67e22;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--secondary-color);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .breadcrumb a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb .separator {
+      color: #888;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .card-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    .search-container {
+      padding: 15px 20px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 500px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 15px 10px 35px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      text-align: left;
+      padding: 12px 20px;
+      font-weight: 600;
+      color: #555;
+      border-bottom: 1px solid var(--border-color);
+      user-select: none;
+      position: relative;
+    }
+
+    th.sortable {
+      cursor: pointer;
+    }
+
+    th.sortable:hover {
+      background-color: #eef1f5;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+
+    tr:hover {
+      background-color: var(--hover-color);
+    }
+
+    td {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .file-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-icon {
+      color: #aaa;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .folder-icon {
+      color: var(--warning-color);
+    }
+
+    .doc-icon {
+      color: var(--primary-color);
+    }
+
+    .file-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    .parent-dir {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    .readme-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .readme-content pre {
+      background-color: #f6f8fa;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 15px 0;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      border-radius: 8px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #777;
+    }
+
+    .close-button:hover {
+      color: #444;
+    }
+
+    .folder-title {
+      margin-bottom: 5px;
+      font-size: 16px;
+      color: var(--primary-dark);
+    }
+
+    .folder-description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .sort-icon {
+      margin-left: 5px;
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+    }
+
+    .sort-icon.active {
+      color: var(--primary-color);
+    }
+
+    .date-old {
+      color: #999;
+    }
+
+    .date-new {
+      color: var(--success-color);
+    }
+
+    .row-actions {
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    tr:hover .row-actions {
+      opacity: 1;
+    }
+
+    .action-button {
+      background: none;
+      border: none;
+      color: #777;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 8px;
+    }
+
+    .action-button:hover {
+      color: var(--primary-color);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #777;
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+      color: #777;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 10px;
+    }
+
+    .view-button {
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #777;
+    }
+
+    .view-button.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .grid-view {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .grid-item {
+      background-color: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .grid-item-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+
+    .grid-item.folder .grid-item-icon {
+      color: var(--warning-color);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+
+    .pagination-button {
+      border: 1px solid var(--border-color);
+      background: white;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pagination-button.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .pagination-button:hover:not(.active) {
+      background-color: var(--hover-color);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .size-column, .date-column {
+        display: none;
+      }
+
+      .grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .breadcrumb {
+        flex-wrap: wrap;
+      }
+
+      .view-toggle {
+        display: none;
+      }
+    }
+
+    /* Dark mode styles */
+    .dark-mode {
+      --primary-color: #81a1c1;
+      --primary-dark: #5e81ac;
+      --secondary-color: #2e3440;
+      --text-color: #e5e9f0;
+      --border-color: #4c566a;
+      --hover-color: #3b4252;
+    }
+
+    .dark-mode body {
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+    }
+
+    .dark-mode .card,
+    .dark-mode .modal-content,
+    .dark-mode .readme-content,
+    .dark-mode .grid-item {
+      background-color: #3b4252;
+    }
+
+    .dark-mode th {
+      background-color: #434c5e;
+      color: #e5e9f0;
+    }
+
+    .dark-mode tr:nth-child(even) {
+      background-color: #434c5e;
+    }
+
+    .dark-mode tr:hover {
+      background-color: #4c566a;
+    }
+
+    .dark-mode .search-input {
+      background-color: #3b4252;
+      color: #e5e9f0;
+      border-color: #4c566a;
+    }
+
+    .dark-mode .modal-header {
+      border-bottom-color: #4c566a;
+    }
+
+    .dark-mode .footer {
+      border-top-color: #4c566a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <span class="logo">ProjectHub</span>
+        <span>Modern Directory Browser</span>
+      </div>
+      <div>
+        <button id="themeToggle" class="theme-toggle" title="Toggle dark mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="breadcrumb" class="breadcrumb">
+      <a href="#" onclick="return loadDirectory('root')">Home</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 id="current-directory" class="card-title">Index of /</h2>
+        <div class="view-toggle">
+          <button id="listViewBtn" class="view-button active" title="List view">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
+              <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/>
+              <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"/>
+            </svg>
+          </button>
+          <button id="gridViewBtn" class="view-button" title="Grid view">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="search-container">
+        <div class="search-box">
+          <span class="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+          </span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search files and folders...">
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="list-view">
+          <table id="directory-table">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="name">
+                  Name
+                  <span class="sort-icon" id="sort-name"></span>
+                </th>
+                <th class="sortable size-column" data-sort="size">
+                  Size
+                  <span class="sort-icon" id="sort-size"></span>
+                </th>
+                <th class="sortable date-column" data-sort="date">
+                  Date
+                  <span class="sort-icon" id="sort-date"></span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="directory-contents">
+              <!-- Content will be dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="grid-view" class="grid-view">
+          <!-- Grid items will be dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <div id="pagination" class="pagination">
+      <!-- Pagination will be dynamically populated -->
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 ProjectHub | <a href="mailto:isokjonov.nurmuhammad@ug.shardauniversity.uz">Contact</a></p>
+      <p>"Wubba lubba dub dub!" - Directory Browser v2.0</p>
+    </div>
+  </div>
+
+  <!-- Modal for displaying README content -->
+  <div id="readmeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">README</h3>
+        <button class="close-button" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre id="readme-content"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data structure for directories
+    const directoryData = {
+      root: {
+        name: "Root Directory",
+        items: [
+          { name: "web-app", type: "folder", date: "1643-Jan-04 09:00", path: "web-app" },
+          { name: "mobile-app", type: "folder", date: "1879-Mar-14 12:30", path: "mobile-app" },
+          { name: "data-visualization", type: "folder", date: "1871-Mar-27 08:45", path: "data-visualization" },
+          { name: "game-dev", type: "folder", date: "1904-Jun-23 10:00", path: "game-dev" },
+          { name: "api-projects", type: "folder", date: "1921-Nov-09 14:30", path: "api-projects" },
+          { name: "machine-learning", type: "folder", date: "1906-Dec-28 11:15", path: "machine-learning" }
+        ]
+      },
+      "web-app": {
+        name: "Web App Projects",
+        items: [
+          { name: "Target Audience of Fast Food Restaurants' Web Sites", type: "file", date: "0460-Jan-01 10:00", link: "https://ion-user-pi.github.io/PetProject001" },
+          { name: "A Website for Selling Furniture", type: "file", date: "1452-Apr-15 12:45", link: "https://ion-user-pi.github.io/PetProject002" },
+          { name: "Creating a Website for a Hospital", type: "file", date: "1643-Jan-04 08:30", link: "https://ion-user-pi.github.io/PetProject003" },
+          { name: "Rhetorical Analysis Essay: an Example of a Web Page Case Study", type: "file", date: "1809-Feb-12 14:15", link: "https://ion-user-pi.github.io/PetProject004" },
+          { name: "Scholarship Application for a Web Design and Development Bachelor's Program", type: "file", date: "1879-Mar-14 11:20", link: "https://ion-user-pi.github.io/PetProject005" },
+          { name: "Cyber security for Amazon Web Services Infrastructure", type: "file", date: "1867-Nov-07 09:10", link: "https://ion-user-pi.github.io/PetProject006" },
+          { name: "Developing a Wix-Based Website", type: "file", date: "1912-Jun-23 15:30", link: "https://ion-user-pi.github.io/PetProject007" },
+          { name: "Ranking Algorithms", type: "file", date: "1831-Jun-08 10:55", link: "https://ion-user-pi.github.io/PetProject008" },
+          { name: "Web Knowledge Extraction", type: "file", date: "1942-Jan-08 08:00", link: "https://ion-user-pi.github.io/PetProject009" },
+          { name: "Programming Languages and Technologies", type: "file", date: "1955-Oct-28 13:40", link: "https://ion-user-pi.github.io/PetProject010" },
+          { name: "Understanding SOA and WS Standards", type: "file", date: "1955-Feb-24 09:35", link: "https://ion-user-pi.github.io/PetProject011" },
+          { name: "Web Service frameworks, architectures, infrastructures", type: "file", date: "1971-Jun-28 12:15", link: "https://ion-user-pi.github.io/PetProject012" },
+          { name: "Web Services Modeling and Performance", type: "file", date: "1956-Jun-08 14:00", link: "https://ion-user-pi.github.io/PetProject013" },
+          { name: "Business Process Integration using Web Services", type: "file", date: "1934-Nov-09 14:30", link: "https://ion-user-pi.github.io/PetProject014" },
+          { name: "Composite Web Service Creation and Enabling infrastructures", type: "file", date: "1815-Dec-10 16:10", link: "https://ion-user-pi.github.io/PetProject015" },
+          { name: "Web Service Coordination Orchestration and Choreography", type: "file", date: "1856-Jul-10 08:20", link: "https://ion-user-pi.github.io/PetProject016" },
+          { name: "QoS in Web Service", type: "file", date: "1564-Feb-15 19:30", link: "https://ion-user-pi.github.io/PetProject017" },
+          { name: "Multimedia Applications using Web Services", type: "file", date: "0287-Mar-01 13:50", link: "https://ion-user-pi.github.io/PetProject018" },
+          { name: "Resource Management for Web Services", type: "file", date: "1920-Jul-25 11:05", link: "https://ion-user-pi.github.io/PetProject019" },
+          { name: "Security in Web Services", type: "file", date: "1918-May-11 17:18", link: "https://ion-user-pi.github.io/PetProject020" },
+          { name: "Simple student bio-data", type: "file", date: "2001-Sep-11 08:00", link: "https://ion-user-pi.github.io/LabProject01/" },
+          { name: "Different types of frames", type: "file", date: "2005-May-29 09:05", link: "https://ion-user-pi.github.io/LabProject02/" },
+          { name: "Different styles", type: "file", date: "2010-Oct-10 14:22", link: "https://ion-user-pi.github.io/LabProject03/" },
+          { name: "Toread.XML file", type: "file", date: "2015-Mar-15 16:50", link: "https://ion-user-pi.github.io/LabProject04/" },
+          { name: "Sorting the values", type: "file", date: "2018-Jul-07 13:12", link: "https://ion-user-pi.github.io/LabProject05/" },
+          { name: "Exception handling", type: "file", date: "2020-Dec-31 10:07", link: "https://ion-user-pi.github.io/LabProject06/" },
+          { name: "Single text field calculator", type: "file", date: "2021-Nov-11 15:45", link: "https://ion-user-pi.github.io/LabProject07/" },
+          { name: "Session handling", type: "file", date: "2022-Aug-08 12:30", link: "https://ion-user-pi.github.io/LabProject08/" },
+          { name: "Regular Expression", type: "file", date: "2023-Apr-04 08:55", link: "https://ion-user-pi.github.io/LabProject09/" },
+          { name: "Email processing", type: "file", date: "2024-Jan-01 17:18", link: "https://ion-user-pi.github.io/LabProject10/" },
+          { name: "Login database", type: "file", date: "2025-Jun-06 14:02", link: "https://ion-user-pi.github.io/LabProject10/" },
+        ]
+      },
+      "mobile-app": {
+        name: "Mobile App Projects",
+        items: [
+          { name: "Android Weather App", type: "file", date: "2022-Mar-15 10:30", link: "https://ion-user-pi.github.io/MobileProject001" },
+          { name: "iOS Fitness Tracker", type: "file", date: "2023-May-22 14:45", link: "https://ion-user-pi.github.io/MobileProject002" },
+          { name: "Cross-Platform Food Delivery App", type: "file", date: "2024-Jan-17 09:20", link: "https://ion-user-pi.github.io/MobileProject003" },
+          { name: "Augmented Reality Shopping App", type: "file", date: "2024-Aug-05 16:10", link: "https://ion-user-pi.github.io/MobileProject004" },
+          { name: "Mobile Payment System", type: "file", date: "2025-Feb-12 11:35", link: "https://ion-user-pi.github.io/MobileProject005" }
+        ]
+      },
+      "data-visualization": {
+        name: "Data Visualization Projects",
+        items: [
+          { name: "COVID-19 Global Dashboard", type: "file", date: "2023-Apr-10 08:15", link: "https://ion-user-pi.github.io/DataVizProject001" },
+          { name: "Climate Change Trends Visualization", type: "file", date: "2023-Sep-28 13:40", link: "https://ion-user-pi.github.io/DataVizProject002" },
+          { name: "Stock Market Interactive Charts", type: "file", date: "2024-Feb-03 15:25", link: "https://ion-user-pi.github.io/DataVizProject003" },
+          { name: "Urban Population Growth Visualization", type: "file", date: "2024-Jul-19 10:50", link: "https://ion-user-pi.github.io/DataVizProject004" },
+          { name: "Sports Analytics Dashboard", type: "file", date: "2025-Jan-15 12:30", link: "https://ion-user-pi.github.io/DataVizProject005" }
+        ]
+      },
+      "game-dev": {
+        name: "Game Development Projects",
+        items: [
+          { name: "2D Platformer Game", type: "file", date: "2023-Mar-05 14:20", link: "https://ion-user-pi.github.io/GameProject001" },
+          { name: "Puzzle Game Collection", type: "file", date: "2023-Aug-12 11:45", link: "https://ion-user-pi.github.io/GameProject002" },
+          { name: "VR Space Exploration Game", type: "file", date: "2024-Jan-30 09:35", link: "https://ion-user-pi.github.io/GameProject003" },
+          { name: "Mobile Racing Game", type: "file", date: "2024-Jun-18 16:05", link: "https://ion-user-pi.github.io/GameProject004" },
+          { name: "Educational Game for Kids", type: "file", date: "2025-Feb-25 10:15", link: "https://ion-user-pi.github.io/GameProject005" }
+        ]
+      },
+      "api-projects": {
+        name: "API Integration Projects",
+        items: [
+          { name: "Weather Data Integration", type: "file", date: "2023-Feb-20 13:10", link: "https://ion-user-pi.github.io/APIProject001" },
+          { name: "Social Media Aggregator", type: "file", date: "2023-Jul-08 15:30", link: "https://ion-user-pi.github.io/APIProject002" },
+          { name: "Payment Gateway Integration", type: "file", date: "2023-Dec-14 10:45", link: "https://ion-user-pi.github.io/APIProject003" },
+          { name: "Map and Location Services", type: "file", date: "2024-May-27 14:20", link: "https://ion-user-pi.github.io/APIProject004" },
+          { name: "E-commerce Product API", type: "file", date: "2025-Jan-09 11:55", link: "https://ion-user-pi.github.io/APIProject005" }
+        ]
+      },
+      "machine-learning": {
+        name: "Machine Learning Projects",
+        items: [
+          { name: "Image Recognition System", type: "file", date: "2023-Apr-15 09:25", link: "https://ion-user-pi.github.io/MLProject001" },
+          { name: "Natural Language Processing Tool", type: "file", date: "2023-Sep-05 14:50", link: "https://ion-user-pi.github.io/MLProject002" },
+          { name: "Predictive Analytics Dashboard", type: "file", date: "2024-Jan-22 11:15", link: "https://ion-user-pi.github.io/MLProject003" },
+          { name: "Recommendation Engine", type: "file", date: "2024-Jun-10 16:30", link: "https://ion-user-pi.github.io/MLProject004" },
+          { name: "Anomaly Detection System", type: "file", date: "2025-Mar-03 10:40", link: "https://ion-user-pi.github.io/MLProject005" }
+        ]
+      }
+    };
+
+    // README content for projects
+    const readmeContent = {
+      "web-app": "# Web App Projects\n\nThis directory contains a collection of web application projects showcasing various technologies and frameworks including HTML, CSS, JavaScript, React, Vue, and Angular.\n\n## Getting Started\n\nEach project has its own README with specific setup instructions. Generally, you'll need Node.js and npm installed.\n\n## Project Categories\n\n- Single Page Applications\n- Progressive Web Apps\n- E-commerce Solutions\n- Portfolio Websites\n- Content Management Systems",
+      "mobile-app": "# Mobile App Projects\n\nA collection of mobile application projects for iOS and Android platforms using frameworks such as React Native, Flutter, and native development tools.\n\n## Requirements\n\n- Android Studio or Xcode\n- Node.js and npm\n- Relevant SDKs\n\n## Project Types\n\n- Utility Apps\n- Social Networking\n- Gaming\n- Productivity\n- Augmented Reality",
+      "data-visualization": "# Data Visualization Projects\n\nProjects focused on presenting data in visual formats using libraries like D3.js, Chart.js, and Tableau.\n\n## Data Sources\n\nThese projects use data from various public APIs and datasets including:\n\n- Government open data\n- Weather services\n- Financial markets\n- Social media trends\n- Scientific research",
+      "game-dev": "# Game Development Projects\n\nA showcase of game development projects using engines like Unity, Unreal, and web-based technologies.\n\n## Tools Used\n\n- Unity3D\n- Unreal Engine\n- Phaser.js\n- Three.js\n- WebGL\n\n## Game Types\n\n- 2D Platformers\n- Puzzle Games\n- First Person Adventures\n- Educational Games\n- Virtual Reality Experiences",
+      "api-projects": "# API Integration Projects\n\nProjects demonstrating the use and integration of various APIs and web services.\n\n## API Categories\n\n- Payment Gateways\n- Mapping Services\n- Social Media\n- Weather Data\n- E-commerce\n\n## Technologies\n\n- RESTful APIs\n- GraphQL\n- OAuth Authentication\n- Webhooks\n- Microservices",
+      "machine-learning": "# Machine Learning Projects\n\nA collection of projects implementing machine learning algorithms and models for various applications.\n\n## Frameworks & Libraries\n\n- TensorFlow\n- PyTorch\n- scikit-learn\n- Keras\n- NLTK\n\n## Application Areas\n\n- Computer Vision\n- Natural Language Processing\n- Predictive Analytics\n- Recommendation Systems\n- Anomaly Detection"
+    };
+
+    // Initialize variables for pagination
+    let currentDirectory = 'root';
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let currentSort = { field: 'name', direction: 'asc' };
+    let filteredItems = [];
+
+    // Load the directory on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDirectory('root');
+      
+      // Event listeners for view toggles
+      document.getElementById('listViewBtn').addEventListener('click', function() {
+        document.getElementById('list-view').style.display = 'block';
+        document.getElementById('grid-view').style.display = 'none';
+        this.classList.add('active');
+        document.getElementById('gridViewBtn').classList.remove('active');
+      });
+      
+      document.getElementById('gridViewBtn').addEventListener('click', function() {
+        document.getElementById('list-view').style.display = 'none';
+        document.getElementById('grid-view').style.display = 'grid';
+        this.classList.add('active');
+        document.getElementById('listViewBtn').classList.remove('active');
+      });
+      
+      // Theme toggle
+      document.getElementById('themeToggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+      });
+      
+      // Search functionality
+      document.getElementById('searchInput').addEventListener('input', function() {
+        const searchQuery = this.value.toLowerCase();
+        filterItems(searchQuery);
+      });
+      
+      // Sort column headers
+      document.querySelectorAll('th.sortable').forEach(function(th) {
+        th.addEventListener('click', function() {
+          const sortField = this.dataset.sort;
+          if (currentSort.field === sortField) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+          } else {
+            currentSort.field = sortField;
+            currentSort.direction = 'asc';
+          }
+          updateSortIcons();
+          renderItems();
+        });
+      });
+    });
+
+    // Function to load a directory
+    function loadDirectory(path, page = 1) {
+      currentDirectory = path;
+      currentPage = page;
+      
+      // Update breadcrumb
+      updateBreadcrumb(path);
+      
+      // Update directory title
+      document.getElementById('current-directory').textContent = `Index of /${directoryData[path].name}`;
+      
+      // Filter items (this will use any active search term)
+      filterItems(document.getElementById('searchInput').value.toLowerCase());
+      
+      return false; // Prevent default link behavior
+    }
+
+    // Filter items based on search query
+    function filterItems(searchQuery) {
+      const allItems = directoryData[currentDirectory].items;
+      
+      if (searchQuery.trim() === '') {
+        filteredItems = [...allItems];
+      } else {
+        filteredItems = allItems.filter(item => 
+          item.name.toLowerCase().includes(searchQuery)
+        );
+      }
+      
+      // Sort the filtered items
+      sortItems();
+      
+      // Reset to first page when filter changes
+      currentPage = 1;
+      
+      // Render the filtered items
+      renderItems();
+    }
+
+    // Sort items based on current sort field and direction
+    function sortItems() {
+      filteredItems.sort((a, b) => {
+        let comparison = 0;
+        
+        switch(currentSort.field) {
+          case 'name':
+            comparison = a.name.localeCompare(b.name);
+            break;
+          case 'size':
+            // For simplicity, we're not including actual file sizes
+            comparison = a.type.localeCompare(b.type);
+            break;
+          case 'date':
+            comparison = new Date(a.date) - new Date(b.date);
+            break;
+        }
+        
+        return currentSort.direction === 'asc' ? comparison : -comparison;
+      });
+    }
+
+    // Update sort icons
+    function updateSortIcons() {
+      document.querySelectorAll('.sort-icon').forEach(icon => {
+        icon.textContent = '';
+        icon.classList.remove('active');
+      });
+      
+      const currentIcon = document.getElementById(`sort-${currentSort.field}`);
+      currentIcon.textContent = currentSort.direction === 'asc' ? '↑' : '↓';
+      currentIcon.classList.add('active');
+    }
+
+    // Render items based on current page and filters
+    function renderItems() {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const itemsToShow = filteredItems.slice(startIndex, endIndex);
+      
+      // Clear table
+      const tableBody = document.getElementById('directory-contents');
+      tableBody.innerHTML = '';
+      
+      // Add parent directory link if not in root
+      if (currentDirectory !== 'root') {
+        const parentRow = document.createElement('tr');
+        parentRow.innerHTML = `
+          <td>
+            <div class="file-cell">
+              <span class="file-icon folder-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M1.146 4.486a.5.5 0 0 1 0-.707l1.483-1.484a.5.5 0 0 1 .708 0L5 3.964V2.5A1.5 1.5 0 0 1 6.5 1h3A1.5 1.5 0 0 1 11 2.5v1.464l1.663-1.669a.5.5 0 0 1 .708 0l1.483 1.484a.5.5 0 0 1 0 .707l-5.037 5.049a.5.5 0 0 1-.707 0L1.146 4.486z"/>
+                  <path d="M14 9.586V6l-2.89 2.896 2.892 2.896A1.5 1.5 0 0 1 14 9.586zM1.998 10.586L4.887 7.69 1.998 4.796A1.5 1.5 0 0 1 2 6v4.586a1.5 1.5 0 0 1-.002 0z"/>
+                  <path d="M9.911 7.693L11 6.604V2.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4.104l1.088 1.089a.5.5 0 0 0 .707 0l1.116-1z"/>
+                </svg>
+              </span>
+              <a href="#" class="file-link parent-dir" onclick="return loadDirectory('root')">..</a>
+            </div>
+          </td>
+          <td class="size-column"></td>
+          <td class="date-column"></td>
+        `;
+        tableBody.appendChild(parentRow);
+      }
+      
+      // Add items
+      if (itemsToShow.length === 0) {
+        const emptyRow = document.createElement('tr');
+        emptyRow.innerHTML = `
+          <td colspan="3" class="empty-state">
+            <div>No items found</div>
+          </td>
+        `;
+        tableBody.appendChild(emptyRow);
+      } else {
+        itemsToShow.forEach(item => {
+          const row = document.createElement('tr');
+          
+          if (item.type === 'folder') {
+            row.innerHTML = `
+              <td>
+                <div class="file-cell">
+                  <span class="file-icon folder-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                    </svg>
+                  </span>
+                  <a href="#" class="file-link" onclick="return loadDirectory('${item.path}')">${item.name}</a>
+                </div>
+              </td>
+              <td class="size-column">-</td>
+              <td class="date-column">${formatDate(item.date)}</td>
+            `;
+          } else {
+            row.innerHTML = `
+              <td>
+                <div class="file-cell">
+                  <span class="file-icon doc-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                    </svg>
+                  </span>
+                  <a href="${item.link}" class="file-link" target="_blank">${item.name}</a>
+                </div>
+              </td>
+              <td class="size-column">-</td>
+              <td class="date-column">${formatDate(item.date)}</td>
+            `;
+          }
+          
+          tableBody.appendChild(row);
+        });
+      }
+      
+      // Update grid view
+      renderGridView(itemsToShow);
+      
+      // Update pagination
+      updatePagination();
+    }
+
+    // Render grid view
+    function renderGridView(items) {
+      const gridContainer = document.getElementById('grid-view');
+      gridContainer.innerHTML = '';
+      
+      // Add parent directory if not in root
+      if (currentDirectory !== 'root') {
+        const parentItem = document.createElement('div');
+        parentItem.className = 'grid-item folder';
+        parentItem.innerHTML = `
+          <div class="grid-item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M1.146 4.486a.5.5 0 0 1 0-.707l1.483-1.484a.5.5 0 0 1 .708 0L5 3.964V2.5A1.5 1.5 0 0 1 6.5 1h3A1.5 1.5 0 0 1 11 2.5v1.464l1.663-1.669a.5.5 0 0 1 .708 0l1.483 1.484a.5.5 0 0 1 0 .707l-5.037 5.049a.5.5 0 0 1-.707 0L1.146 4.486z"/>
+              <path d="M14 9.586V6l-2.89 2.896 2.892 2.896A1.5 1.5 0 0 1 14 9.586zM1.998 10.586L4.887 7.69 1.998 4.796A1.5 1.5 0 0 1 2 6v4.586a1.5 1.5 0 0 1-.002 0z"/>
+              <path d="M9.911 7.693L11 6.604V2.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4.104l1.088 1.089a.5.5 0 0 0 .707 0l1.116-1z"/>
+            </svg>
+          </div>
+          <a href="#" class="file-link parent-dir" onclick="return loadDirectory('root')">..</a>
+        `;
+        gridContainer.appendChild(parentItem);
+      }
+      
+      // Add items
+      if (items.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        emptyState.innerHTML = 'No items found';
+        gridContainer.appendChild(emptyState);
+      } else {
+        items.forEach(item => {
+          const gridItem = document.createElement('div');
+          gridItem.className = `grid-item ${item.type}`;
+          
+          if (item.type === 'folder') {
+            gridItem.innerHTML = `
+              <div class="grid-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                </svg>
+              </div>
+              <a href="#" class="file-link" onclick="return loadDirectory('${item.path}')">${item.name}</a>
+            `;
+          } else {
+            gridItem.innerHTML = `
+              <div class="grid-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                </svg>
+              </div>
+              <a href="${item.link}" class="file-link" target="_blank">${item.name}</a>
+            `;
+          }
+          
+          gridContainer.appendChild(gridItem);
+        });
+      }
+    }
+
+    // Update pagination controls
+    function updatePagination() {
+      const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+      const paginationContainer = document.getElementById('pagination');
+      paginationContainer.innerHTML = '';
+      
+      if (totalPages <= 1) {
+        return;
+      }
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.className = 'pagination-button';
+      prevButton.innerHTML = '&laquo;';
+      prevButton.disabled = currentPage === 1;
+      prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+          loadDirectory(currentDirectory, currentPage - 1);
+        }
+      });
+      paginationContainer.appendChild(prevButton);
+      
+      // Page buttons
+      const maxButtons = 5;
+      const startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+      const endPage = Math.min(totalPages, startPage + maxButtons - 1);
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          loadDirectory(currentDirectory, i);
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.className = 'pagination-button';
+      nextButton.innerHTML = '&raquo;';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+          loadDirectory(currentDirectory, currentPage + 1);
+        }
+      });
+      paginationContainer.appendChild(nextButton);
+    }
+
+    // Update breadcrumb based on current directory
+    function updateBreadcrumb(path) {
+      const breadcrumb = document.getElementById('breadcrumb');
+      breadcrumb.innerHTML = '<a href="#" onclick="return loadDirectory(\'root\')">Home</a>';
+      
+      if (path !== 'root') {
+        breadcrumb.innerHTML += `
+          <span class="separator">/</span>
+          <a href="#" onclick="return loadDirectory('${path}')">${directoryData[path].name}</a>
+        `;
+        
+        // Add README link if available
+        if (readmeContent[path]) {
+          breadcrumb.innerHTML += `
+            <span class="separator">|</span>
+            <a href="#" onclick="return showReadme('${path}')">README</a>
+          `;
+        }
+      }
+    }
+
+    // Format date for display
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = now - date;
+      const day = 24 * 60 * 60 * 1000;
+      const month = 30 * day;
+      
+      // Apply different classes based on age
+      let className = '';
+      if (diff < 7 * day) {
+        className = 'date-new';
+      } else if (diff > 6 * month) {
+        className = 'date-old';
+      }
+      
+      return `<span class="${className}">${dateString}</span>`;
+    }
+
+    // Show README content in modal
+    function showReadme(path) {
+      const modal = document.getElementById('readmeModal');
+      const contentElement = document.getElementById('readme-content');
+      
+      contentElement.textContent = readmeContent[path];
+      modal.style.display = 'flex';
+      
+      return false;
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('readmeModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('readmeModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+  </script>
+</body>
+
+</html>
